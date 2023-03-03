@@ -22,22 +22,22 @@ shops.append(kopte)
 
 var shopnames: Array<String> = ["Tuku-Tuku","Gotri", "Madam Lie", "Kopte"]
 
-var cart : Array<KeyValuePairs<String, Int>> = Array()
+var cart : Array<Dictionary<String, Int>> = Array()
 
 var userInput:String = " "
 
 repeat{
     print("Welcome to UC Walk Cafeteria 🧑‍🍳👩‍🍳")
     print("""
-        Please choose a cafeteria:
-        [1] Tuku-Tuku
-        [2] Gotri
-        [3] Madam Lie
-        [4] Kopte
-         -
-        [S]hopping Cart
-        [Q]uit
-        Your cafeteria choice?
+    Please choose a cafeteria:
+    [1] Tuku-Tuku
+    [2] Gotri
+    [3] Madam Lie
+    [4] Kopte
+    -
+    [S]hopping Cart
+    [Q]uit
+    Your cafeteria choice?
     """)
     
     //Logic for choosing
@@ -69,6 +69,17 @@ repeat{
             print("Your Cart is empty")
             print("")
         } else {
+            //calculate price & print in cart
+            for itemsInCart in cart {
+                var index = itemsInCart["resNameIndex"]!
+                var tempSHOP = shops[index]
+                total_price = tempSHOP[itemsInCart["food"]!].value * itemsInCart["totalItems"]!
+                
+                print("Your order from \(shopnames[index]): ")
+                print("- \(tempSHOP[itemsInCart["food"]!].key) x \(itemsInCart["totalItems"]!)")
+            }
+            
+            
             //print cart
             print("""
             Press [B] to go back
@@ -76,11 +87,7 @@ repeat{
             Your choice?
             """)
             
-            //calculate price
-            for itemsInCart in cart {
-                var tempSHOP = shops[itemsInCart["resNameIndex"]]
-                total_price = tempSHOP[itemsInCart["food"]].value * itemsInCart["totalItems"]
-            }
+            
             
             var userPay = " "
                

@@ -70,7 +70,7 @@ func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: 
 }
 
 func addFoodtoCart(resNameIndex: Int, food: Int, totalItems: Int) {
-    var temp: KeyValuePairs<String, Int> = ["resNameIndex": resNameIndex, "food": food, "totalItems": totalItems]
+    var temp: Dictionary<String, Int> = ["resNameIndex": resNameIndex, "food": food, "totalItems": totalItems]
     cart.append(temp)
 }
 
