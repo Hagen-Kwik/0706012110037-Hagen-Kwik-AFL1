@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		042C437229AD9DE3007B7FFA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042C437129AD9DE3007B7FFA /* main.swift */; };
+		042C437929AF9B2D007B7FFA /* restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042C437829AF9B2D007B7FFA /* restaurant.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		042C436E29AD9DE3007B7FFA /* 0706012110037-Hagen Kwik-AFL1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "0706012110037-Hagen Kwik-AFL1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		042C437129AD9DE3007B7FFA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		042C437829AF9B2D007B7FFA /* restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = restaurant.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				042C437129AD9DE3007B7FFA /* main.swift */,
+				042C437829AF9B2D007B7FFA /* restaurant.swift */,
 			);
 			path = "0706012110037-Hagen Kwik-AFL1";
 			sourceTree = "<group>";
@@ -120,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042C437929AF9B2D007B7FFA /* restaurant.swift in Sources */,
 				042C437229AD9DE3007B7FFA /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
