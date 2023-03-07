@@ -8,15 +8,15 @@
 import Foundation
 
 
-func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: String){
+func printFoods(shops: KeyValuePairs<String, KeyValuePairs<String, Int> >, userInput: Int){
     var userInputForFood = " "
     
-    print("Hi, welcome back to \(shopName)!")
+    print("Hi, welcome back to \(shops[userInput].key)!")
     print("What would you like to order?")
     
     while true{
         var num = 1
-        for MenuItems in Menu{
+        for MenuItems in shops[userInput].value {
             print("[\(num)] \(MenuItems.key)")
             num += 1
         }
@@ -34,7 +34,7 @@ func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: 
             break
         }
         //check if number
-        if Int(userInputForFood) ?? -1 < Menu.count+1 && Int(userInputForFood) ?? -1 > 0{
+        if Int(userInputForFood) ?? -1 < shops[userInput].value.count+1 && Int(userInputForFood) ?? -1 > 0{
             userInputForFood = String(Int(userInputForFood)!-1)
             break
         }
@@ -46,9 +46,10 @@ func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: 
         case "B":
             break
         default:
-            print(Menu[Int(userInputForFood)!].key + "@ \(Menu[Int(userInputForFood)!].value)")
         
-            print("How many \(Menu[Int(userInputForFood)!].key) do you want to buy ?")
+            print(shops[userInput].value[Int(userInputForFood)!].key + " @ \( shops[userInput].value[Int(userInputForFood)!].value )")
+        
+            print("How many \(shops[userInput].value[Int(userInputForFood)!].key) do you want to buy ?")
             
             var userInputForBuying = " "
 
@@ -60,7 +61,7 @@ func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: 
                 print("Please Enter a valid number")
             }
         
-            addFoodtoCart(resNameIndex: shopNameIndex, food: Int(userInputForFood)!, totalItems: Int(userInputForBuying)!)
+    addFoodtoCart(name: shops[userInput].value[Int(userInputForFood)!].key, price: shops[userInput].value[Int(userInputForFood)!].value , quantity: Int(userInputForBuying)!, StoreName: shops[userInput].key )
 
             print("Thank You for Ordering")
         }
@@ -69,10 +70,41 @@ func printFoods(Menu: KeyValuePairs<String, Int>, shopNameIndex: Int, shopName: 
     }
 }
 
-func addFoodtoCart(resNameIndex: Int, food: Int, totalItems: Int) {
-    var temp: Dictionary<String, Int> = ["resNameIndex": resNameIndex, "food": food, "totalItems": totalItems]
-    cart.append(temp)
+func addFoodtoCart(name: String, price: Int, quantity: Int, StoreName: String) {
+    var temp: [String: Any] = ["Name": name, "Price": price, "Quantity": quantity]
+    
+    //check if restaurant is present
+    if carts[StoreName] != nil {
+        //check so no double food if no double input new
+        if !checkdoublePay(StoreName: StoreName, name: name, quantity: quantity) {
+            carts[StoreName]!.append(temp)
+        }
+    } else {
+        var TempArray = [Dictionary<String, Any>] ()
+
+        carts[StoreName] = TempArray
+        carts[StoreName]!.append(temp)
+
+    }
+    print(carts)
 }
+
+func checkdoublePay(StoreName: String, name: String, quantity: Int) -> Bool {
+    var numTEMP = 0
+    
+    for items in carts[StoreName]! {
+        if items["Name"] as! String == name {
+            carts[StoreName]![numTEMP]["Quantity"] = items["Quantity"] as! Int + quantity
+            return true
+        }
+        numTEMP += 1
+    }
+    
+    return false
+}
+    
+//    carts[StoreName]!.append(temp)
+//}
 
 
 func pay(total_price: Int){
@@ -98,7 +130,7 @@ func pay(total_price: Int){
     print("You pay \(your_money)  Change:\(Int(your_money)! - total_price)")
     print("Enjoy your meals!")
     
-    cart.removeAll()
+//    carts["Tuku-Tuku"].removeAll()
     
     var returnBool = "A"
 

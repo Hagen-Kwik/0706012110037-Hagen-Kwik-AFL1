@@ -14,15 +14,10 @@ let kopte: KeyValuePairs<String, Int>  = ["Tempe": 6000, "Nasi Padang": 50000, "
 
 
 
-var shops : Array<KeyValuePairs<String, Int>> = Array()
-shops.append(tukutuku)
-shops.append(gotri)
-shops.append(madamlie)
-shops.append(kopte)
+var shops : KeyValuePairs<String, KeyValuePairs<String, Int> > = ["Tuku-Tuku": tukutuku, "Gotri": gotri, "Madam Lie": madamlie, "Kopte": kopte]
 
-var shopnames: Array<String> = ["Tuku-Tuku","Gotri", "Madam Lie", "Kopte"]
+var carts : Dictionary<String, Array< Dictionary<String, Any> > > = [:]
 
-var cart : Array<Dictionary<String, Int>> = Array()
 
 var userInput:String = " "
 
@@ -48,7 +43,7 @@ repeat{
             break
         }
         //check if number
-        if Int(userInput) ?? -1 > 0 && Int(userInput) ?? -1 > 0{
+        if Int(userInput) ?? -1 > 0 && Int(userInput) ?? -1 < shops.count + 1{
             //user input -1 because index start from 0
             userInput = String(Int(userInput)!-1)
             break
@@ -61,22 +56,27 @@ repeat{
     case "Q":
         break
         //shopping cart
-    case "S":
+    case "S":   
         var total_price = 0
         
-        if cart.count == 0  {
+        
+        if carts.isEmpty {
             print("")
             print("Your Cart is empty")
             print("")
         } else {
+            
             //calculate price & print in cart
-            for itemsInCart in cart {
-                var index = itemsInCart["resNameIndex"]!
-                var tempSHOP = shops[index]
-                total_price = tempSHOP[itemsInCart["food"]!].value * itemsInCart["totalItems"]!
-                
-                print("Your order from \(shopnames[index]): ")
-                print("- \(tempSHOP[itemsInCart["food"]!].key) x \(itemsInCart["totalItems"]!)")
+            for itemsInCart in carts {
+                print("Your order from \(itemsInCart.key): ")
+    
+                for itemsInsideEachShop in itemsInCart.value {
+                    var price: Int = itemsInsideEachShop["Price"] as! Int
+                    var qty: Int  = itemsInsideEachShop["Quantity"] as! Int
+                    total_price = total_price + (price * qty)
+                    
+                    print("- \(itemsInsideEachShop["Name"] ?? "") x \(itemsInsideEachShop["Quantity"] ?? "")")
+                }
             }
             
             
@@ -87,11 +87,8 @@ repeat{
             Your choice?
             """)
             
-            
-            
             var userPay = " "
                
-            
             while(true){
                 userPay = readLine()?.uppercased() ?? " "
                 //for shopping cart or quit
@@ -100,7 +97,6 @@ repeat{
                 }
                 print("That is not a valid response! Please Try Again.")
             }
-                
             if(userPay == "B"){
                 break
             } else{
@@ -110,7 +106,9 @@ repeat{
         }
             	
     default:
-        printFoods(Menu: shops[Int(userInput)!], shopNameIndex: Int(userInput)!, shopName: shopnames[Int(userInput)!])
+        printFoods(shops: shops, userInput: Int(userInput)!)
     }
     
 } while(userInput != "Q")
+
+
