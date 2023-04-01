@@ -2,23 +2,43 @@
 //  main.swift
 //  0706012110037-Hagen Kwik-AFL1
 //
-//  Created by MacBook Pro on 28/02/23.
+//  Created by MacBook Pro on 03/03/23.
 //
+
 
 import Foundation
 
-//  Initiate Food Items/menu as Key value pairs
-let tukutuku: KeyValuePairs<String, Int> = ["Rawon": 20000, "Sate": 15000, "Nasi Goreng": 10000, "Jus Jeruk": 5000]
-let gotri: KeyValuePairs<String, Int>  = ["Tahu Telor": 17000, "Soto": 12000, "Nasi Bakar": 10000, "Air Mineral": 2000]
-let madamlie: KeyValuePairs<String, Int>  = ["Dadar Jagung": 8000, "Kikil": 30000, "Lemper": 10000, "Kopi Tubruk": 7000]
-let kopte: KeyValuePairs<String, Int>  = ["Tempe": 6000, "Nasi Padang": 50000, "Nasi Limau": 100000, "Jahe": 12000]
+// create restaurant struct and input food
+var Kopte = Restaurant(name: "Kopte")
+Kopte.addFood(food: food(name: "Rawon", price: 20_000))
+Kopte.addFood(food: food(name: "Nasi Goreng", price: 10_000))
+Kopte.addFood(food: food(name: "Sate", price: 15_000))
+Kopte.addFood(food: food(name: "Soto", price: 5_000))
+
+var MadamLie = Restaurant(name: "Madam Lie")
+MadamLie.addFood(food: food(name: "Jus Jeruk", price: 12_000))
+MadamLie.addFood(food: food(name: "Tahu Telor", price: 17_000))
+MadamLie.addFood(food: food(name: "Nasi Bakar", price: 10_000))
+MadamLie.addFood(food: food(name: "Air Mineral", price: 7_000))
+
+var Gotri = Restaurant(name: "Gotri")
+Gotri.addFood(food: food(name: "Kopi Tubruk", price: 7_000))
+Gotri.addFood(food: food(name: "Lemper", price: 10_000))
+Gotri.addFood(food: food(name: "Nasi Limau", price: 7_000))
+Gotri.addFood(food: food(name: "Dadar Jagung", price: 7_000))
+
+var TukuTuku = Restaurant(name: "Tuku Tuku")
+TukuTuku.addFood(food: food(name: "Tempe", price: 6_000))
+TukuTuku.addFood(food: food(name: "Nasi Padang", price: 50_000))
+TukuTuku.addFood(food: food(name: "Jahe", price: 12_000))
+TukuTuku.addFood(food: food(name: "Gado", price: 23_000))
 
 
-// put menu of each restaurant using another key value pair
-var shops : KeyValuePairs<String, KeyValuePairs<String, Int> > = ["Tuku-Tuku": tukutuku, "Gotri": gotri, "Madam Lie": madamlie, "Kopte": kopte]
+// put all restaurant in 1 array
+var shops = [Kopte, MadamLie, Gotri, TukuTuku]
 
-//initiate shopping  cart
-var carts : Dictionary<String, Array< Dictionary<String, Any> > > = [:]
+//initiate shopping cart struct
+var Carts = Cart(cart: [])
 
 //initiate fur user input
 var userInput:String = " "
@@ -29,10 +49,16 @@ repeat{
     print("Welcome to UC Walk Cafeteria 🧑‍🍳👩‍🍳")
     print("""
     Please choose a cafeteria:
-    [1] Tuku-Tuku
-    [2] Gotri
-    [3] Madam Lie
-    [4] Kopte
+    """)
+    var numForPrinting = 1
+    for res in shops {
+        print("""
+    [\(numForPrinting)] \(res.name)
+    """)
+        numForPrinting += 1
+    }
+    print("""
+    
     -
     [S]hopping Cart
     [Q]uit
@@ -65,62 +91,49 @@ repeat{
         //shopping cart
     case "S":
         //initiate total price for counting later
-        var total_price = 0
         
         //check if cart is empty
-        if carts.isEmpty {
+        if Carts.cartStatus() {
             print("")
             print("Your Cart is empty")
             print("")
         } else {
-            
-            //calculate price & print in cart
-            for itemsInCart in carts {
-                print("Your order from \(itemsInCart.key): ")
-    
-                for itemsInsideEachShop in itemsInCart.value {
-                    let price: Int = itemsInsideEachShop["Price"] as! Int
-                    let qty: Int  = itemsInsideEachShop["Quantity"] as! Int
-                    total_price = total_price + (price * qty)
-                    
-                    print("- \(itemsInsideEachShop["Name"] ?? "") x \(itemsInsideEachShop["Quantity"] ?? "")")
-                }
-            }
-            
-            
-            //print cart choices
-            print("""
-            Press [B] to go back
-            Press [P] to pay / checkout
-            Your choice?
-            """)
-            
-            var userPay = " "
-            
-            //logic for checker either back or pay
-            while(true){
-                userPay = readLine()?.uppercased() ?? " "
-                //for shopping cart or back
-                if userPay == "B" || userPay == "P" {
-                    break
-                }
-                print("That is not a valid response! Please Try Again.")
-            }
-            //     logic end
-            
-            //switch for buy or pay
-            if(userPay == "B"){
-                break
-            } else{
-                //call pay function
-                pay(total_price: total_price)
-                break
-            }
+            Carts.showCart()
         }
-            	
+            
+        //print cart choices
+        print("""
+        
+        Press [B] to go back
+        Press [P] to pay / checkout
+        Your choice?
+        """)
+            
+        var userPay = " "
+            
+        //logic for checker either back or pay
+        while(true){
+            userPay = readLine()?.uppercased() ?? " "
+            //for shopping cart or back
+            if userPay == "B" || userPay == "P" {
+                break
+            }
+            print("That is not a valid response! Please Try Again.")
+        }
+        // logic end
+        
+        //switch for buy or pay
+        if(userPay == "B"){
+            break
+        } else{
+            //call pay function
+            pay(total_price: Carts.totalPrice)
+            break
+        }
+                
     default:
         //else print each menu of restaurant
-        printFoods(shops: shops, userInput: Int(userInput)!)
+        MenuForRestaurant(name: shops[Int(userInput) ?? 0].name, foodItem: shops[Int(userInput) ?? 0].food)
     }
     
 } while(userInput != "Q")
